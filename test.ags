@@ -1,0 +1,15 @@
+(defun spit
+	(id miracle
+		"builtins" "print" (id $1)
+	)
+)
+(defun thesis
+	(id spit
+		("this language belongs to makise kurisu. there are many like it, but this one is hers.")
+	)
+)
+(def a (id (id "desu")))
+(spit
+	("lol swej" (+ 9000 1) a)
+)
+(thesis)
