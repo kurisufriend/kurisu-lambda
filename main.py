@@ -8,6 +8,21 @@ def isnum(n):
     return True
 reps = ["(", ")", "\"", ","]
 f = open(sys.argv[1]).read()
+
+def expand(file):
+    tmp = file.split("\n")
+    for idx, i in enumerate(tmp):
+        if len(i) < 1:
+            continue
+        elif i[:8] == "INCLUDE:":
+            tmp[idx] = expand(open(i[8:]).read())
+        elif i[0] == ":":
+            tmp.pop(idx)
+    return "\n".join(tmp)
+
+f = expand(f)
+
+
 f = f.replace(" ", " RDANEELOLIVAW ") # spacer
 for r in reps: f = f.replace(r, " "+r+" ")
 f = f.split()

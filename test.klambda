@@ -1,15 +1,4 @@
-(defun spit
-	(id miracle
-		"builtins" "print" (id $1))
-)
-(defun input
-	(id miracle
-		"builtins" "input" (""))
-)
-(defun thesis
-	(id spit
-		("this language belongs to makise kurisu. there are many like it, but this one is hers."))
-)
+INCLUDE:./lib/aids.klambda
 
 (def a (id (id "desu")))
 (spit
@@ -20,7 +9,6 @@
 	(id spit ("one"))
 	(id spit ("zero"))
 )
-(thesis)
 
 (spit ("how old are you? > "))
 (def age (conv number (input)))
@@ -32,3 +20,5 @@
 		)
 	)
 )
+
+(thesis)
