@@ -53,6 +53,10 @@ def execute(ctx):
                 return idspace[subs[1]]
             elif ctx[0] == _ident("+"):
                 return (subs[1][0], subs[1][1]+subs[2][1])
+            elif ctx[0] == _ident("=="):
+                return ("number", 1.0 if subs[1] == subs[2] else 0.0)
+            elif ctx[0] == _ident("="):
+                return ("number", 1.0 if str(float(subs[1][1])) == str(float(subs[2][1])) else 0.0)
             elif ctx[0] == _ident("defun"):
                 funcspace[subs[1]] = subs[2]
                 return funcspace[subs[1]]

@@ -1,22 +1,21 @@
 (defun spit
 	(id miracle
-		"builtins" "print" (id $1)
-	)
+		"builtins" "print" (id $1))
 )
 (defun input
 	(id miracle
-		"builtins" "input" ("")
-	)
+		"builtins" "input" (""))
 )
 (defun thesis
 	(id spit
-		("this language belongs to makise kurisu. there are many like it, but this one is hers.")
-	)
+		("this language belongs to makise kurisu. there are many like it, but this one is hers."))
 )
+
 (def a (id (id "desu")))
 (spit
 	("lol swej" (+ 9000 1) a)
 )
+(spit ((cond (= "10" (+ 1 9)) "same" "not same")))
 (cond ("", (+ 0 1))
 	(id spit ("one"))
 	(id spit ("zero"))
