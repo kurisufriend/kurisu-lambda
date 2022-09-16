@@ -3,6 +3,11 @@
 		"builtins" "print" (id $1)
 	)
 )
+(defun input
+	(id miracle
+		"builtins" "input" ("")
+	)
+)
 (defun thesis
 	(id spit
 		("this language belongs to makise kurisu. there are many like it, but this one is hers.")
@@ -11,5 +16,9 @@
 (def a (id (id "desu")))
 (spit
 	("lol swej" (+ 9000 1) a)
+)
+(cond ("", (+ 0 1))
+	(id spit ("one"))
+	(id spit ("zero"))
 )
 (thesis)

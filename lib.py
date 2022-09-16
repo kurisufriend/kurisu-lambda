@@ -25,6 +25,20 @@ def execute(ctx):
                 return subs
             else:
                 return to if i == fr else i
+        def _truthy(i):
+            if i[0] == "string":
+                return True if i[1] else False
+            elif i[0] == "number":
+                return False if i[1] == 0 else True
+            elif type(i) == type([]):
+                good = False
+                for j in i:
+                    if _truthy(j):
+                        good = True
+                        break
+                return good
+            else:
+                return False
         if type(ctx) == type([]) and ctx[0][0] == "identifier":
             subs = list(
                 map(lambda a: _execute(a), ctx)
@@ -42,6 +56,8 @@ def execute(ctx):
             elif ctx[0] == _ident("defun"):
                 funcspace[subs[1]] = subs[2]
                 return funcspace[subs[1]]
+            elif ctx[0] == _ident("cond"):
+                return _execute(subs[2]) if _truthy(_execute(subs[1])) else _execute(subs[3])
             elif ctx[0] in funcspace:
                 prototype = funcspace[ctx[0]]
                 for idx, arg in enumerate(subs[1:]):
