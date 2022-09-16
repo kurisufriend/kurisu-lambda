@@ -21,3 +21,14 @@
 	(id spit ("zero"))
 )
 (thesis)
+
+(spit ("how old are you? > "))
+(def age (conv number (input)))
+(spit 
+	(
+		(cond (> age 18)
+			"adult"
+			"not adult"
+		)
+	)
+)

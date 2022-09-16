@@ -129,5 +129,4 @@ program = structurize(lex(tokenize(f)))
 
 #print(program)
 
-for strand in program:
-    lib.execute(strand)
+lib.execute(program)
