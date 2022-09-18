@@ -14,6 +14,7 @@ def execute(program):
         def _destr(t):
             return t[1] if t[0] == "string" else ""
         def _fixarr(a):
+            a = [a] if not type(a) == type([]) else a
             for i in a:
                 if i[0] == "identifier" and i in idspace:
                     a[a.index(i)] = idspace[i]
@@ -77,6 +78,11 @@ def execute(program):
                 return _execute(subs[2]) if _truthy(_execute(subs[1])) else _execute(subs[3])
             elif ctx[0] == _ident("conv"):
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
+            elif ctx[0] == _ident("all"):
+                ret = _execute(subs[1])
+                for statement in subs[2:]:
+                    ret = _execute(statement)
+                return ret
             elif ctx[0] in funcspace:
                 prototype = funcspace[ctx[0]]
                 for idx, arg in enumerate(subs[1:]):
