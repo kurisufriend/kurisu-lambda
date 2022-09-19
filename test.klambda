@@ -21,4 +21,16 @@ INCLUDE:./lib/aids.klambda
 	)
 )
 
+(defun loop
+	(id all
+		(id id spit ($1))
+		(id id cond (id id id = $1 $2)
+			$1
+			(id id id loop (id id id id + $1 1) $2)
+		)
+	)
+)
+
+(loop 0 5)
+
 (thesis)

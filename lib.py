@@ -54,7 +54,9 @@ def execute(program):
             )
             _fixarr(subs)
             #print("abba", ctx, subs)
-            if ctx[0][1] == "id":
+            if ctx[0][1][0] == "$":
+                return subs
+            elif ctx[0][1] == "id":
                 return subs[1] if len(subs[1:]) == 1 else subs[1:]
             elif ctx[0] == _ident("miracle"):
                 return _box(getattr(sys.modules[_destr(subs[1])], _destr(subs[2]))(*[i[1] for i in _fixarr(subs[3])]))
