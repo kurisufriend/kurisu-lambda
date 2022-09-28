@@ -15,18 +15,18 @@ INCLUDE:./lib/aids.klambda
 (spit 
 	(
 		(cond (> age 18)
-			"adult"
-			"not adult"
+			"adult (hag)"
+			"not adult (uoh)"
 		)
 	)
 )
 
 (defun loop
-	(id all
-		(id id spit ($1))
-		(id id cond (id id id = $1 $2)
+	(all
+		(spit ($1))
+		(cond (= $1 $2)
 			$1
-			(id id id loop (id id id id + $1 1) $2)
+			(loop (+ $1 1) $2)
 		)
 	)
 )

@@ -49,11 +49,17 @@ def execute(program):
             else:
                 return ("identifier", item)
         if type(ctx) == type([]) and ctx[0][0] == "identifier":
-            subs = list(
-                map(lambda a: _execute(a), ctx)
-            )
-            _fixarr(subs)
             #print("abba", ctx, subs)
+
+
+            if ctx[0] == _ident("defun"):
+                funcspace[ctx[1]] = ctx[2]
+                return funcspace[ctx[1]]
+            elif ctx[0] == _ident("cond"):
+                return _execute(ctx[2]) if _truthy(_execute(ctx[1])) else _execute(ctx[3])
+
+            subs = _fixarr(list(map(lambda a: _execute(a), ctx)))
+
             if ctx[0][1][0] == "$":
                 return subs
             elif ctx[0][1] == "id":
@@ -65,6 +71,8 @@ def execute(program):
                 return idspace[subs[1]]
             elif ctx[0] == _ident("+"):
                 return (subs[1][0], subs[1][1]+subs[2][1])
+            elif ctx[0] == _ident("%"):
+                return (subs[1][0], subs[1][1]%subs[2][1])
             elif ctx[0] == _ident("=="):
                 return ("number", 1.0 if subs[1] == subs[2] else 0.0)
             elif ctx[0] == _ident("="):
@@ -73,12 +81,8 @@ def execute(program):
                 return ("number", 1.0 if subs[1][1] > subs[2][1] else 0.0)
             elif ctx[0] == _ident("<"):
                 return ("number", 1.0 if subs[1][1] < subs[2][1] else 0.0)
-            elif ctx[0] == _ident("defun"):
-                funcspace[subs[1]] = subs[2]
-                return funcspace[subs[1]]
-            elif ctx[0] == _ident("cond"):
-                return _execute(subs[2]) if _truthy(_execute(subs[1])) else _execute(subs[3])
             elif ctx[0] == _ident("conv"):
+                print(subs)
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
             elif ctx[0] == _ident("all"):
                 ret = _execute(subs[1])

@@ -2,14 +2,14 @@
 : i'm hilarious.
 
 (defun spit
-	(id miracle
+	(miracle
 		"builtins" "print" (id $1))
 )
 (defun input
-	(id miracle
+	(miracle
 		"builtins" "input" (""))
 )
 (defun thesis
-	(id spit
+	(spit
 		("this language belongs to makise kurisu. there are many like it, but this one is hers."))
 )
