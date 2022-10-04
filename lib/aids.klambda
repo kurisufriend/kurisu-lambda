@@ -5,13 +5,10 @@ INCLUDE:./lib/loop.klambda
 
 (defun spit
 	(miracle
-		"builtins" "print" (id $1))
-)
+		"builtins" "print" (id $1)))
 (defun input
 	(miracle
-		"builtins" "input" (""))
-)
+		"builtins" "input" ("")))
 (defun thesis
 	(spit
-		("this language belongs to makise kurisu. there are many like it, but this one is hers."))
-)
+		("this language belongs to makise kurisu. there are many like it, but this one is hers.")))
