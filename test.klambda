@@ -4,33 +4,21 @@ INCLUDE:./lib/aids.klambda
 (spit
 	("lol swej" (+ 9000 1) a)
 )
-(spit ((cond (= "10" (+ 1 9)) "same" "not same")))
+(spit (cond (= "10" (+ 1 9)) "same" "not same"))
 (cond ("", (+ 0 1))
-	(id spit ("one"))
-	(id spit ("zero"))
+	(id spit "one")
+	(id spit "zero")
 )
 
-(spit ("how old are you? > "))
+(spit "how old are you? > ")
 (def age (conv number (input)))
-(spit 
-	(
-		(cond (> age 18)
-			"adult (hag)"
-			"not adult (uoh)"
-		)
+(spit
+	(cond (> age 18)
+		"adult (hag)"
+		"not adult (uoh)"
 	)
 )
 
-(defun loop
-	(all
-		(spit ($1))
-		(cond (= $1 $2)
-			$1
-			(loop (+ $1 1) $2)
-		)
-	)
-)
-
-(loop 0 5)
+loop:0:100:(spit (cond (% $1 15) (cond (% $1 5) (cond (% $1 3) $1 "fizz") "buzz") "fizzbuzz"))
 
 (thesis)

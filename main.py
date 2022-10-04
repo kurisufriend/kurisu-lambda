@@ -10,17 +10,35 @@ reps = ["(", ")", "\"", ","]
 f = open(sys.argv[1]).read()
 
 def expand(file):
-    tmp = file.split("\n")
+    tmp = file.replace("\\\n", "").split("\n")
+    defs = {}
     for idx, i in enumerate(tmp):
+        parts = i.split(":")
         if len(i) < 1:
             continue
         elif i[:8] == "INCLUDE:":
-            tmp[idx] = expand(open(i[8:]).read())
+            tdefs, tmp[idx] = expand(open(i[8:]).read())
+            defs.update(tdefs)
+        elif i[:7] == "DEFINE:":
+            parts = parts[1:]
+            defs[parts[0]] = (parts[2:], parts[1].replace("\t", " "))
+            tmp.pop(idx)
         elif i[0] == ":":
             tmp.pop(idx)
-    return "\n".join(tmp)
+        elif i.split(":")[0] in defs.keys():
+            parts = i.split(":")
+            args, exp = defs[parts[0]]
 
-f = expand(f)
+            for arg_idx, arg in enumerate(parts[1:]):
+                exp = exp.replace(
+                    args[arg_idx], arg
+                )
+            #print(exp, "exp")
+            tmp[idx] = exp
+        #print(i, "\nsep")
+    return (defs, "\n".join(tmp))
+
+f = expand(f)[1]
 
 
 f = f.replace(" ", " RDANEELOLIVAW ") # spacer

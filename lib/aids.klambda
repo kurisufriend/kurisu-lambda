@@ -1,6 +1,8 @@
 : get it? because std?
 : i'm hilarious.
 
+INCLUDE:./lib/loop.klambda
+
 (defun spit
 	(miracle
 		"builtins" "print" (id $1))

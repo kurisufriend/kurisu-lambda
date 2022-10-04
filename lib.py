@@ -82,7 +82,6 @@ def execute(program):
             elif ctx[0] == _ident("<"):
                 return ("number", 1.0 if subs[1][1] < subs[2][1] else 0.0)
             elif ctx[0] == _ident("conv"):
-                print(subs)
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
             elif ctx[0] == _ident("all"):
                 ret = _execute(subs[1])
@@ -90,11 +89,13 @@ def execute(program):
                     ret = _execute(statement)
                 return ret
             elif ctx[0] in funcspace:
+                #print(subs)
                 prototype = funcspace[ctx[0]]
                 for idx, arg in enumerate(subs[1:]):
                     idx += 1
                     prototype = _recursereplace(prototype, ("identifier", f"${idx}"), arg)
                     #print(f"${idx}", prototype)
+                #print(prototype)
                 return _execute(prototype)
             else:
                 print("no such function", ctx[0])
@@ -108,12 +109,11 @@ def execute(program):
                 )
             return ctx
     for strand in program:
-#        try: _execute(strand)
-        _execute(strand)
-#        except Exception as e: 
-#            print("failed in", strand, "with", e)
-#            traceback.print_stack()
-#            exit()
+        try: _execute(strand)
+#        _execute(strand)
+        except Exception as e: 
+            print("failed in", strand, "with", e)
+            _execute(strand)
     #input()
 
 

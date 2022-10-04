@@ -1,0 +1,11 @@
+DEFINE:loop:(defun loop\
+	(all\
+		statement\
+		(cond (= $1 $2)\
+			$1\
+			(loop (+ $1 1) $2)\
+		)\
+	)\
+)\
+(loop start end)\
+:start:end:statement
