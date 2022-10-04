@@ -1,4 +1,4 @@
-import lib, sys
+import lib, sys, pathlib
 
 def isnum(n):
     try:
@@ -9,7 +9,9 @@ def isnum(n):
 reps = ["(", ")", "\"", ","]
 f = open(sys.argv[1]).read()
 
-def expand(file):
+def expand(file, path):
+    working_directory = pathlib.Path(path).parent.resolve()
+    print(working_directory)
     tmp = file.replace("\\\n", "").split("\n")
     defs = {}
     for idx, i in enumerate(tmp):
@@ -17,7 +19,8 @@ def expand(file):
         if len(i) < 1:
             continue
         elif i[:8] == "INCLUDE:":
-            tdefs, tmp[idx] = expand(open(i[8:]).read())
+            fpath = str(working_directory)+"/"+i[8:]
+            tdefs, tmp[idx] = expand(open(fpath).read(), fpath)
             defs.update(tdefs)
         elif i[:7] == "DEFINE:":
             parts = parts[1:]
@@ -38,7 +41,7 @@ def expand(file):
         #print(i, "\nsep")
     return (defs, "\n".join(tmp))
 
-f = expand(f)[1]
+f = expand(f, sys.argv[1])[1]
 
 
 f = f.replace(" ", " RDANEELOLIVAW ") # spacer
