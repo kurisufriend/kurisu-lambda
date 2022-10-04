@@ -18,6 +18,6 @@ INCLUDE:./lib/aids.klambda
 loop:0:100:(spit (cond (% $1 15) (cond (% $1 5) (cond (% $1 3) $1 "fizz") "buzz") "fizzbuzz"))
 
 (def moeblob ("moe" "moe~" "kyun!!"))
-:loop:0:(length moeblob):(spit (at $1 moeblob))
+loop:0:(length moeblob):(spit (at $1 moeblob))
 
 (thesis)
