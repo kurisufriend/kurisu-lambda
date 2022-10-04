@@ -11,7 +11,6 @@ f = open(sys.argv[1]).read()
 
 def expand(file, path):
     working_directory = pathlib.Path(path).parent.resolve()
-    print(working_directory)
     tmp = file.replace("\\\n", "").split("\n")
     defs = {}
     for idx, i in enumerate(tmp):
