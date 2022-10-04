@@ -1,5 +1,9 @@
 this language belongs to makise kurisu. there are many like it, but this one is hers.
 
+the interpreter is currently written in python 3. when I feel comfortable with the 
+implemented features, a "real" spec will be frozen and I will make a native one.
+this implementation does not rely on any modules or libraries outside of the python
+standard library.
 
 syntax:
 
@@ -14,6 +18,14 @@ lists starting with defined function identifiers are executed with the rest of t
 as parameters, i.e. (spit "hello~" (+ 9000 1)). runs `spit` using "hello" and (+ 9000 1).
 the lower-order function is calculated for the higher-order one, so it ends up calling
 `spit` with "hello" and 9001.
+there are also pre-processor macros:
+- INCLUDE:<path>, for expanding and inserting another file
+- DEFINE:<name>:macro:<arg1>:<arg2>:<argn>, for defining macros
+- <defined macro>:<arg1>:<arg2>:<argn>, for expanding macros
+- :<misc>, for adding comments (lines removed in pre-processing)
+you may notice that the language looks like a lisp/scheme and the preprocessor keywords
+are similar to m4/cpp. I'm a fan of homoiconicity, and this provides both a familiar and
+a delightfully simple syntax.
 
 examples:
 
