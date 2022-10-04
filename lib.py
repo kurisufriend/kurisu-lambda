@@ -71,8 +71,16 @@ def execute(program):
                 return idspace[subs[1]]
             elif ctx[0] == _ident("+"):
                 return (subs[1][0], subs[1][1]+subs[2][1])
+            elif ctx[0] == _ident("-"):
+                return (subs[1][0], subs[1][1]-subs[2][1])
+            elif ctx[0] == _ident("*"):
+                return (subs[1][0], subs[1][1]*subs[2][1])
+            elif ctx[0] == _ident("/"):
+                return (subs[1][0], subs[1][1]/subs[2][1])
             elif ctx[0] == _ident("%"):
                 return (subs[1][0], subs[1][1]%subs[2][1])
+            elif ctx[0] == _ident("!"):
+                return ("number", 0.0 if subs[1] else 1.0)
             elif ctx[0] == _ident("=="):
                 return ("number", 1.0 if subs[1] == subs[2] else 0.0)
             elif ctx[0] == _ident("="):
@@ -88,6 +96,10 @@ def execute(program):
                 for statement in subs[2:]:
                     ret = _execute(statement)
                 return ret
+            elif ctx[0] == _ident("at"):
+                return subs[2][int(subs[1][1])]
+            elif ctx[0] == _ident("length"):
+                return _box(len(subs[1]))
             elif ctx[0] in funcspace:
                 #print(subs)
                 prototype = funcspace[ctx[0]]
@@ -116,23 +128,3 @@ def execute(program):
             _execute(strand)
     #input()
 
-
-def oldexecute(ctx):
-    import sys
-    def _ident(name):
-        return ("identifier", name)
-    def _destr(t):
-        return t[1] if t[0] == "string" else ""
-    def _fixarr(a):
-        for i in a:
-            if i[0] == "identifier":
-                a[a.index(i)] = idspace[i]
-        return a
-
-                
-    if ctx[0] == _ident("miracle"):
-        getattr(sys.modules[_destr(ctx[1])], _destr(ctx[2]))(*[i[1] for i in _fixarr(ctx[3])])
-    elif ctx[0] == _ident("def"):
-        idspace[ctx[1]] = ctx[2]
-    elif ctx[0] == _ident("eval"):
-        execute(ctx[1])
