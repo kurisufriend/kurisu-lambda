@@ -94,41 +94,6 @@ def lex(toks):
             lexed.append(("identifier", t))
     return lexed
 
-def shit_structurize(chunk):
-    def splitlist(l, delim):
-        res = []
-        tmp = []
-        for i in l:
-            if i == delim:
-                res.append(tmp)
-                tmp = []
-            else:
-                tmp.append(i)
-        res.append(tmp)
-        res = list(filter(lambda a: a != [], res))
-        if type(res) == type([]) and len(res) == 1:
-            return res[0]
-        return res
-    if chunk[0][0] == "open":
-        end = chunk.index(("close", chunk[0][1]))
-
-        
-        cunny = []
-        cunny.append(chunk[1])
-
-        jc = splitlist(chunk[2:end], ("sep", None))
-
-        for i in jc:
-            if chunk[0][0] == "open":
-                #chunk.append(structurize(jc))
-                #break
-                print(chunk)
-            cunny.append(structurize(i))
-        print(cunny, len(cunny), jc)
-        return cunny
-    else:
-        return chunk
-
 def structurize(program):
     def _amidone(prog):
         good = True
