@@ -46,6 +46,8 @@ def execute(program):
                 return ("number", item)
             elif type(item) == type(""):
                 return ("string", item)
+            elif type(item) == type([]):
+                return list(map(lambda a: _box(a), item))
             else:
                 return ("identifier", item)
         if type(ctx) == type([]) and ctx[0][0] == "identifier":
@@ -98,8 +100,6 @@ def execute(program):
                 return ret
             elif ctx[0] == _ident("at"):
                 return subs[2][int(subs[1][1])]
-            elif ctx[0] == _ident("length"):
-                return _box(len(subs[1]))
             elif ctx[0] in funcspace:
                 #print(subs)
                 prototype = funcspace[ctx[0]]
