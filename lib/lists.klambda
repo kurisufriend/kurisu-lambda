@@ -1,0 +1,3 @@
+(defun length
+	(miracle
+		"builtins" "len" ((id $1))))

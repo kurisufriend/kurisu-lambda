@@ -2,13 +2,5 @@
 : i'm hilarious.
 
 INCLUDE:./loop.klambda
-
-(defun spit
-	(miracle
-		"builtins" "print" (id $1)))
-(defun input
-	(miracle
-		"builtins" "input" ("")))
-(defun thesis
-	(spit
-		("this language belongs to makise kurisu. there are many like it, but this one is hers.")))
+INCLUDE:./lists.klambda
+INCLUDE:./kokoro.klambda
