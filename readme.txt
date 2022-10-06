@@ -25,7 +25,7 @@ there are also pre-processor macros:
 - :<misc>, for adding comments (lines removed in pre-processing)
 you may notice that the language looks like a lisp/scheme and the preprocessor keywords
 are similar to m4/cpp. I'm a fan of homoiconicity, and this provides both a familiar and
-a delightfully simple syntax.
+delightfully simple syntax.
 
 examples:
 
