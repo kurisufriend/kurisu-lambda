@@ -32,6 +32,7 @@ def expand(file, path):
             args, exp = defs[parts[0]]
 
             for arg_idx, arg in enumerate(parts[1:]):
+                if len(args) < 1: break
                 exp = exp.replace(
                     args[arg_idx], arg
                 )

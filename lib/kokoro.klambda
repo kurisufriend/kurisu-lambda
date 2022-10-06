@@ -7,3 +7,4 @@
 (defun thesis
 	(spit
 		("this language belongs to makise kurisu. there are many like it, but this one is hers.")))
+DEFINE:<3:(thesis)
