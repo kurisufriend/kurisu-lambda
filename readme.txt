@@ -26,7 +26,7 @@ there are also pre-processor macros:
 you may notice that the language looks like a lisp/scheme and the preprocessor keywords
 are similar to m4/cpp. I'm a fan of homoiconicity, and this provides both a familiar and
 delightfully simple syntax. note that it doesn't actually function like a lisp under the
-hood: there's no cons, for instance.
+hood: there's no cons, for instance. no church numerals either, so it isn't pure(tm).
 
 examples:
 
