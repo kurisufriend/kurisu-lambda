@@ -67,7 +67,7 @@ def execute(program):
             elif ctx[0][1] == "id":
                 return subs[1] if len(subs[1:]) == 1 else subs[1:]
             elif ctx[0] == _ident("miracle"):
-                return _box(getattr(sys.modules[_destr(subs[1])], _destr(subs[2]))(*[i[1] for i in _fixarr(subs[3])]))
+                return _box(eval(_destr(subs[1]))[_destr(subs[2])](*[i[1] for i in _fixarr(subs[3])]))
             elif ctx[0] == _ident("def"):
                 idspace[subs[1]] = subs[2]
                 return idspace[subs[1]]
