@@ -57,8 +57,8 @@ def execute(program):
 
 
             if ctx[0] == _ident("defun"):
-                funcspace[ctx[1]] = ctx[2]
-                return funcspace[ctx[1]]
+                fns[ctx[1]] = ctx[2]
+                return fns[ctx[1]]
             elif ctx[0] == _ident("cond"):
                 return _execute(ctx[2], lids, lfns) if _truthy(_execute(ctx[1], lids, lfns)) else _execute(ctx[3], lids, lfns)
 
@@ -105,9 +105,9 @@ def execute(program):
             elif ctx[0] == _ident("insert"):
                 subs[3].insert(int(subs[1][1]), subs[2])
                 return subs[3]
-            elif ctx[0] in funcspace:
+            elif ctx[0] in fns:
                 #print(subs)
-                prototype = funcspace[ctx[0]]
+                prototype = fns[ctx[0]]
                 for idx, arg in enumerate(subs[1:]):
                     idx += 1
                     prototype = _recursereplace(prototype, ("identifier", f"${idx}"), arg)
