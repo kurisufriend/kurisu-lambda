@@ -6,9 +6,11 @@ idspace = {}
 funcspace = {}
 
 def execute(program):
-    import traceback
-    def _execute(ctx):
+    import traceback, copy
+    def _execute(ctx, ids, fns):
         import sys, functools
+        lids = copy.deepcopy(ids)
+        lfns = copy.deepcopy(fns)
         def _ident(name):
             return ("identifier", name)
         def _destr(t):
@@ -16,8 +18,8 @@ def execute(program):
         def _fixarr(a):
             a = [a] if not type(a) == type([]) else a
             for i in a:
-                if i[0] == "identifier" and i in idspace:
-                    a[a.index(i)] = idspace[i]
+                if i[0] == "identifier" and i in ids:
+                    a[a.index(i)] = ids[i]
             return a
         def _recursereplace(i, fr, to):
             if type(i) == type([]):
@@ -58,9 +60,9 @@ def execute(program):
                 funcspace[ctx[1]] = ctx[2]
                 return funcspace[ctx[1]]
             elif ctx[0] == _ident("cond"):
-                return _execute(ctx[2]) if _truthy(_execute(ctx[1])) else _execute(ctx[3])
+                return _execute(ctx[2], lids, lfns) if _truthy(_execute(ctx[1], lids, lfns)) else _execute(ctx[3], lids, lfns)
 
-            subs = _fixarr(list(map(lambda a: _execute(a), ctx)))
+            subs = _fixarr(list(map(lambda a: _execute(a, lids, lfns), ctx)))
 
             if ctx[0][1][0] == "$":
                 return subs
@@ -69,8 +71,8 @@ def execute(program):
             elif ctx[0] == _ident("miracle"):
                 return _box(eval(_destr(subs[1]))[_destr(subs[2])](*[i[1] for i in _fixarr(subs[3])]))
             elif ctx[0] == _ident("def"):
-                idspace[subs[1]] = subs[2]
-                return idspace[subs[1]]
+                ids[ctx[1]] = subs[2]
+                return ids[ctx[1]]
             elif ctx[0] == _ident("+"):
                 return (subs[1][0], subs[1][1]+subs[2][1])
             elif ctx[0] == _ident("-"):
@@ -94,9 +96,9 @@ def execute(program):
             elif ctx[0] == _ident("conv"):
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
             elif ctx[0] == _ident("all"):
-                ret = _execute(subs[1])
+                ret = _execute(subs[1], lids, lfns)
                 for statement in subs[2:]:
-                    ret = _execute(statement)
+                    ret = _execute(statement, lids, lfns)
                 return ret
             elif ctx[0] == _ident("at"):
                 return subs[2][int(subs[1][1])]
@@ -111,7 +113,7 @@ def execute(program):
                     prototype = _recursereplace(prototype, ("identifier", f"${idx}"), arg)
                     #print(f"${idx}", prototype)
                 #print(prototype)
-                return _execute(prototype)
+                return _execute(prototype, lids, lfns)
             else:
                 print("no such function", ctx[0])
                 return None
@@ -120,14 +122,14 @@ def execute(program):
             #print("base", ctx)
             if type(ctx) == type([]):
                 return list(
-                    map(lambda a: _execute(a), ctx)
+                    map(lambda a: _execute(a, lids, lfns), ctx)
                 )
             return ctx
     for strand in program:
-        try: _execute(strand)
+        try: _execute(strand, idspace, funcspace)
 #        _execute(strand)
         except Exception as e: 
             print("failed in", strand, "with", e)
-            _execute(strand)
+            _execute(strand, idspace, funcspace)
     #input()
 
