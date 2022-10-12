@@ -2,8 +2,7 @@
 # BET UR MAD BAKADESU HAHAHAHHAHAHAHAH
 # t. cirno
 
-idspace = {}
-funcspace = {}
+
 
 def execute(program):
     import traceback, copy
@@ -125,6 +124,8 @@ def execute(program):
                     map(lambda a: _execute(a, lids, lfns), ctx)
                 )
             return ctx
+    idspace = {}
+    funcspace = {}
     for strand in program:
         try: _execute(strand, idspace, funcspace)
 #        _execute(strand)
