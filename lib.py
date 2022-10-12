@@ -100,6 +100,9 @@ def execute(program):
                 return ret
             elif ctx[0] == _ident("at"):
                 return subs[2][int(subs[1][1])]
+            elif ctx[0] == _ident("insert"):
+                subs[3].insert(int(subs[1][1]), subs[2])
+                return subs[3]
             elif ctx[0] in funcspace:
                 #print(subs)
                 prototype = funcspace[ctx[0]]

@@ -1,3 +1,6 @@
 (defun length
 	(miracle
 		"__builtins__" "len" ((id $1))))
+
+(defun append
+	(insert (length $2) $1 $2))
