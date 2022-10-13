@@ -8,8 +8,8 @@ def execute(program):
     import traceback, copy
     def _execute(ctx, ids, fns):
         import sys, functools
-        lids = copy.deepcopy(ids)
-        lfns = copy.deepcopy(fns)
+        lids = copy.copy(ids)
+        lfns = copy.copy(fns)
         def _ident(name):
             return ("identifier", name)
         def _destr(t):
@@ -114,8 +114,7 @@ def execute(program):
                 #print(prototype)
                 return _execute(prototype, lids, lfns)
             else:
-                print("no such function", ctx[0])
-                return None
+                return subs
 
         else:
             #print("base", ctx)
