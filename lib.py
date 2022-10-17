@@ -58,6 +58,8 @@ def execute(program):
             if ctx[0] == _ident("defun"):
                 fns[ctx[1]] = ctx[2]
                 return fns[ctx[1]]
+            elif ctx[0] == _ident("lambda"):
+                return ("lambda", (ctx[1], ctx[2]))
             elif ctx[0] == _ident("cond"):
                 return _execute(ctx[2], lids, lfns) if _truthy(_execute(ctx[1], lids, lfns)) else _execute(ctx[3], lids, lfns)
 
@@ -114,14 +116,20 @@ def execute(program):
                 #print(prototype)
                 return _execute(prototype, lids, lfns)
             else:
+                #print(f"{subs[0]} is not a valid function")
                 return subs
-
+        elif ctx[0][0] == "lambda":
+            prototype = ctx[0][1][1]
+            for idx, arg in enumerate(ctx[0][1][0]):
+                prototype = _recursereplace(prototype, arg, ctx[1:][idx])
+            return _execute(prototype, lids, lfns)
         else:
             #print("base", ctx)
             if type(ctx) == type([]):
                 return list(
                     map(lambda a: _execute(a, lids, lfns), ctx)
                 )
+                
             return ctx
     idspace = {}
     funcspace = {}
