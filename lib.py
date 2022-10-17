@@ -70,7 +70,7 @@ def execute(program):
             elif ctx[0][1] == "id":
                 return subs[1] if len(subs[1:]) == 1 else subs[1:]
             elif ctx[0] == _ident("miracle"):
-                return _box(eval(_destr(subs[1]))[_destr(subs[2])](*[i[1] for i in _fixarr(subs[3])]))
+                return _box(eval(_destr(subs[1]))[_destr(subs[2])](*[(i if type(i) == type([]) else i[1]) for i in _fixarr(subs[3])]))
             elif ctx[0] == _ident("def"):
                 ids[ctx[1]] = subs[2]
                 return ids[ctx[1]]
@@ -117,7 +117,7 @@ def execute(program):
                 return _execute(prototype, lids, lfns)
             else:
                 #print(f"{subs[0]} is not a valid function")
-                return subs
+                return _execute(subs, lids, lfns)
         elif ctx[0][0] == "lambda":
             prototype = ctx[0][1][1]
             for idx, arg in enumerate(ctx[0][1][0]):
