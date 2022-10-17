@@ -124,6 +124,6 @@ def execute(program):
 #        _execute(strand)
         except Exception as e: 
             print("failed in", strand, "with", e)
-            _execute(strand, idspace, funcspace)
+            _execute(strand, idspace)
     #input()
 
