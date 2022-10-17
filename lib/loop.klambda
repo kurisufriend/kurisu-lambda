@@ -1,8 +1,8 @@
-DEFINE:loop:(defun loop\
+DEFINE:loop:(def loop (lambda (counter max)\
 	(all\
 		statement\
-		(cond (= $1 $2)\
-			$1\
-			(loop (+ $1 1) $2))))\
+		(cond (= counter max)\
+			counter\
+			(loop (+ counter 1) max)))))\
 (loop start end)\
 :start:end:statement
