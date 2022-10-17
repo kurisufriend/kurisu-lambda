@@ -6,10 +6,9 @@
 
 def execute(program):
     import traceback, copy
-    def _execute(ctx, ids, fns):
+    def _execute(ctx, ids):
         import sys, functools
         lids = copy.copy(ids)
-        lfns = copy.copy(fns)
         def _ident(name):
             return ("identifier", name)
         def _destr(t):
@@ -55,15 +54,12 @@ def execute(program):
             #print("abba", ctx, subs)
 
 
-            if ctx[0] == _ident("defun"):
-                fns[ctx[1]] = ctx[2]
-                return fns[ctx[1]]
-            elif ctx[0] == _ident("lambda"):
+            if ctx[0] == _ident("lambda"):
                 return ("lambda", (ctx[1], ctx[2]))
             elif ctx[0] == _ident("cond"):
-                return _execute(ctx[2], lids, lfns) if _truthy(_execute(ctx[1], lids, lfns)) else _execute(ctx[3], lids, lfns)
+                return _execute(ctx[2], lids) if _truthy(_execute(ctx[1], lids)) else _execute(ctx[3], lids)
 
-            subs = _fixarr(list(map(lambda a: _execute(a, lids, lfns), ctx)))
+            subs = _fixarr(list(map(lambda a: _execute(a, lids), ctx)))
 
             if ctx[0][1][0] == "$":
                 return subs
@@ -97,44 +93,34 @@ def execute(program):
             elif ctx[0] == _ident("conv"):
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
             elif ctx[0] == _ident("all"):
-                ret = _execute(subs[1], lids, lfns)
+                ret = _execute(subs[1], lids)
                 for statement in subs[2:]:
-                    ret = _execute(statement, lids, lfns)
+                    ret = _execute(statement, lids)
                 return ret
             elif ctx[0] == _ident("at"):
                 return subs[2][int(subs[1][1])]
             elif ctx[0] == _ident("insert"):
                 subs[3].insert(int(subs[1][1]), subs[2])
                 return subs[3]
-            elif ctx[0] in fns:
-                #print(subs)
-                prototype = fns[ctx[0]]
-                for idx, arg in enumerate(subs[1:]):
-                    idx += 1
-                    prototype = _recursereplace(prototype, ("identifier", f"${idx}"), arg)
-                    #print(f"${idx}", prototype)
-                #print(prototype)
-                return _execute(prototype, lids, lfns)
             else:
                 #print(f"{subs[0]} is not a valid function")
-                return _execute(subs, lids, lfns)
+                return _execute(subs, lids)
         elif ctx[0][0] == "lambda":
             prototype = ctx[0][1][1]
             for idx, arg in enumerate(ctx[0][1][0]):
                 prototype = _recursereplace(prototype, arg, ctx[1:][idx])
-            return _execute(prototype, lids, lfns)
+            return _execute(prototype, lids)
         else:
             #print("base", ctx)
             if type(ctx) == type([]):
                 return list(
-                    map(lambda a: _execute(a, lids, lfns), ctx)
+                    map(lambda a: _execute(a, lids), ctx)
                 )
                 
             return ctx
     idspace = {}
-    funcspace = {}
     for strand in program:
-        try: _execute(strand, idspace, funcspace)
+        try: _execute(strand, idspace)
 #        _execute(strand)
         except Exception as e: 
             print("failed in", strand, "with", e)
