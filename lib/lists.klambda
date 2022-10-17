@@ -1,6 +1,6 @@
-(defun length
+(def length (lambda (cunny)
 	(miracle
-		"__builtins__" "len" ((id $1))))
+		"__builtins__" "len" (cunny))))
 
-(defun append
-	(insert (length $2) $1 $2))
+(def append (lambda (item, victim)
+	(insert (length victim) item victim)))

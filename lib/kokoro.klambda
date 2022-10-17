@@ -1,10 +1,11 @@
-(defun spit
+(def spit (lambda (cunny)
+    (miracle
+        "__builtins__" "print" (id cunny))))
+
+(def input (lambda ()
 	(miracle
-		"__builtins__" "print" (id $1)))
-(defun input
-	(miracle
-		"__builtins__" "input" ("")))
-(defun thesis
+		"__builtins__" "input" (""))))
+(def thesis (lambda ()
 	(spit
-		("this language belongs to makise kurisu. there are many like it, but this one is hers.")))
+		("this language belongs to makise kurisu. there are many like it, but this one is hers."))))
 DEFINE:<3:(thesis)
