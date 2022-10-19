@@ -2,8 +2,6 @@
 # BET UR MAD BAKADESU HAHAHAHHAHAHAHAH
 # t. cirno
 
-
-
 def execute(program):
     import traceback, copy
     def _execute(ctx, ids):
@@ -58,13 +56,14 @@ def execute(program):
                 return ("lambda", (ctx[1], ctx[2]))
             elif ctx[0] == _ident("cond"):
                 return _execute(ctx[2], lids) if _truthy(_execute(ctx[1], lids)) else _execute(ctx[3], lids)
+            elif ctx[0][1] == "id":
+                return ctx[1] if len(ctx[1:]) == 1 else ctx[1:]
 
             subs = _fixarr(list(map(lambda a: _execute(a, lids), ctx)))
 
             if ctx[0][1][0] == "$":
                 return subs
-            elif ctx[0][1] == "id":
-                return subs[1] if len(subs[1:]) == 1 else subs[1:]
+
             elif ctx[0] == _ident("miracle"):
                 return _box(eval(_destr(subs[1]))[_destr(subs[2])](*[(i if type(i) == type([]) else i[1]) for i in _fixarr(subs[3])]))
             elif ctx[0] == _ident("def"):
@@ -107,11 +106,12 @@ def execute(program):
                 return _execute(subs, lids)
         elif ctx[0][0] == "lambda":
             prototype = ctx[0][1][1]
+            ephemeral_space = copy.copy(ids)
             for idx, arg in enumerate(ctx[0][1][0]):
-                prototype = _recursereplace(prototype, arg, ctx[1:][idx])
-            return _execute(prototype, lids)
+                ephemeral_space[arg] = ctx[1:][idx]
+                #prototype = _recursereplace(prototype, arg, ctx[1:][idx])
+            return _execute(prototype, ephemeral_space)
         else:
-            #print("base", ctx)
             if type(ctx) == type([]):
                 return list(
                     map(lambda a: _execute(a, lids), ctx)
