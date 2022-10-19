@@ -1,8 +1,6 @@
-DEFINE:loop:(def loop (lambda (counter max)\
-	(all\
-		statement\
-		(cond (= counter max)\
-			counter\
-			(loop (+ counter 1) max)))))\
-(loop start end)\
-:start:end:statement
+(def loop (lambda (max i statement)
+    (all 
+        statement
+        (cond (= i max)
+            false
+            (loop max (- i 1) (id statement))))))
