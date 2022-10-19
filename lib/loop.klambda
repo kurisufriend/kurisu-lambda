@@ -4,3 +4,10 @@
         (cond (= i max)
             false
             (loop max (- i 1) (id statement))))))
+
+(def each
+    (lambda (it action)
+        (loop 0 (- (length it) 1)
+            (id all 
+                (def item (at i it))
+                action))))
