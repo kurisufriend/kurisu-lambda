@@ -8,11 +8,12 @@ standard library.
 syntax:
 
 a program is a series of functions executed using one environment -- that is, sharing 
-defined variables and functions.
+some defined variables and functions.
 these functions are executed homoiconic objects made up of language types:
 - list, `()` and everything inside. items are delimited by whitespace.
 - string, everything between `"` double quotes
 - number, everything capable of being represented as a decimal float value
+- lambda, an anonymous expression containing the args and procedure
 - identifier, everything else
 lists starting with defined function identifiers are executed with the rest of the list
 as parameters, i.e. (spit "hello~" (+ 9000 1)). runs `spit` using "hello" and (+ 9000 1).
