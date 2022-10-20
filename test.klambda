@@ -19,7 +19,7 @@ INCLUDE:./lib/aids.klambda
 	(id spit (cond (% i 15) (cond (% i 5) (cond (% i 3) i "fizz") "buzz") "fizzbuzz")))
 
 (def moeblob ("moe" "moe~" "kyun!!"))
-(loop 0 (- (length moeblob) 1)
-	(id spit (at i moeblob)))
+(each moeblob
+	(id spit item))
 
 (thesis)
