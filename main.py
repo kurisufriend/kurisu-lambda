@@ -6,47 +6,46 @@ def isnum(n):
     except:
         return False
     return True
-reps = ["(", ")", "\"", ","]
-f = open(sys.argv[1]).read()
 
-def expand(file, path):
-    working_directory = pathlib.Path(path).parent.resolve()
-    tmp = file.replace("\\\n", "").split("\n")
-    defs = {}
-    for idx, i in enumerate(tmp):
-        parts = i.split(":")
-        if len(i) < 1:
-            continue
-        elif i[:8] == "INCLUDE:":
-            fpath = str(working_directory)+"/"+i[8:]
-            tdefs, tmp[idx] = expand(open(fpath).read(), fpath)
-            defs.update(tdefs)
-        elif i[:7] == "DEFINE:":
-            parts = parts[1:]
-            defs[parts[0]] = (parts[2:], parts[1].replace("\t", " "))
-            tmp.pop(idx)
-        elif i[0] == ":":
-            tmp.pop(idx)
-        elif i.split(":")[0] in defs.keys():
+def preprocess(filename):
+    def expand(file, path):
+        working_directory = pathlib.Path(path).parent.resolve()
+        tmp = file.replace("\\\n", "").split("\n")
+        defs = {}
+        for idx, i in enumerate(tmp):
             parts = i.split(":")
-            args, exp = defs[parts[0]]
+            if len(i) < 1:
+                continue
+            elif i[:8] == "INCLUDE:":
+                fpath = str(working_directory)+"/"+i[8:]
+                tdefs, tmp[idx] = expand(open(fpath).read(), fpath)
+                defs.update(tdefs)
+            elif i[:7] == "DEFINE:":
+                parts = parts[1:]
+                defs[parts[0]] = (parts[2:], parts[1].replace("\t", " "))
+                tmp.pop(idx)
+            elif i[0] == ":":
+                tmp.pop(idx)
+            elif i.split(":")[0] in defs.keys():
+                parts = i.split(":")
+                args, exp = defs[parts[0]]
 
-            for arg_idx, arg in enumerate(parts[1:]):
-                if len(args) < 1: break
-                exp = exp.replace(
-                    args[arg_idx], arg
-                )
-            #print(exp, "exp")
-            tmp[idx] = exp
-        #print(i, "\nsep")
-    return (defs, "\n".join(tmp))
+                for arg_idx, arg in enumerate(parts[1:]):
+                    if len(args) < 1: break
+                    exp = exp.replace(
+                        args[arg_idx], arg
+                    )
+                #print(exp, "exp")
+                tmp[idx] = exp
+            #print(i, "\nsep")
+        return (defs, "\n".join(tmp))
 
-f = expand(f, sys.argv[1])[1]
+    f = open(filename).read()
+    f = expand(f, sys.argv[1])[1]
 
-
-f = f.replace(" ", " RDANEELOLIVAW ") # spacer
-for r in reps: f = f.replace(r, " "+r+" ")
-f = f.split()
+    f = f.replace(" ", " RDANEELOLIVAW ") # spacer
+    for r in ["(", ")", "\"", ","]: f = f.replace(r, " "+r+" ")
+    return f.split()
 
 def tokenize(f):
     toks = []
@@ -125,7 +124,7 @@ def structurize(program):
 
 #print(tokenize(f))
 #print(lex(tokenize(f)), "\n")
-program = structurize(lex(tokenize(f)))
+program = structurize(lex(tokenize(preprocess(sys.argv[1]))))
 #lib.execute(structurize(lex(tokenize(f))))
 
 #print(program)
