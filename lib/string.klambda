@@ -1,3 +1,3 @@
-(def str2lst (lambda (l)
+(def str2lst (lambda (s)
     (miracle
-        "__builtins__" "list" (l))))
+        "__import__('builtins')" "list" (s))))

@@ -1,10 +1,10 @@
 (def spit (lambda (cunny)
     (miracle
-        "__builtins__" "print" (id cunny))))
+        "__import__('builtins')" "print" (id cunny))))
 
 (def input (lambda ()
 	(miracle
-		"__builtins__" "input" (""))))
+		"__import__('builtins')" "input" (""))))
 (def thesis (lambda ()
 	(spit
 		("this language belongs to makise kurisu. there are many like it, but this one is hers."))))

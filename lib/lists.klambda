@@ -1,6 +1,6 @@
 (def length (lambda (cunny)
 	(miracle
-		"__builtins__" "len" (cunny))))
+		"__import__('builtins')" "len" (cunny))))
 
 (def append (lambda (item, victim)
 	(insert (length victim) item victim)))
