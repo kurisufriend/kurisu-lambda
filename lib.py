@@ -4,6 +4,7 @@
 
 def execute(program):
     import traceback, copy
+    from functools import reduce
     def _execute(ctx, ids):
         import sys, functools
         lids = copy.copy(ids)
@@ -70,13 +71,13 @@ def execute(program):
                 ids[ctx[1]] = subs[2]
                 return ids[ctx[1]]
             elif ctx[0] == _ident("+"):
-                return (subs[1][0], subs[1][1]+subs[2][1])
+                return reduce(lambda a, b: (a[0], a[1]+b[1]), subs[1:])
             elif ctx[0] == _ident("-"):
-                return (subs[1][0], subs[1][1]-subs[2][1])
+                return reduce(lambda a, b: (a[0], a[1]-b[1]), subs[1:])
             elif ctx[0] == _ident("*"):
-                return (subs[1][0], subs[1][1]*subs[2][1])
+                return reduce(lambda a, b: (a[0], a[1]*b[1]), subs[1:])
             elif ctx[0] == _ident("/"):
-                return (subs[1][0], subs[1][1]/subs[2][1])
+                return reduce(lambda a, b: (a[0], a[1]/b[1]), subs[1:])
             elif ctx[0] == _ident("%"):
                 return (subs[1][0], subs[1][1]%subs[2][1])
             elif ctx[0] == _ident("!"):
@@ -123,7 +124,7 @@ def execute(program):
         try: _execute(strand, idspace)
 #        _execute(strand)
         except Exception as e: 
-            print("failed in", strand, "with", e)
+            print("failed in top-level", strand, "with", e)
             _execute(strand, idspace)
     #input()
 
