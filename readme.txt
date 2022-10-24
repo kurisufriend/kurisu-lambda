@@ -15,10 +15,13 @@ these functions are executed homoiconic objects made up of language types:
 - number, everything capable of being represented as a decimal float value
 - lambda, an anonymous expression containing the args and procedure
 - identifier, everything else
-lists starting with defined function identifiers are executed with the rest of the list
-as parameters, i.e. (spit "hello~" (+ 9000 1)). runs `spit` using "hello" and (+ 9000 1).
-the lower-order function is calculated for the higher-order one, so it ends up calling
-`spit` with "hello" and 9001.
+an identifier previously defined in the scope will expand upon execution
+to the expression it is defined to. e.g. (def add (lambda (a b) a+b)) will
+cause any executed instance of `add` to expand to (lambda (a b) a+b)).
+lists starting with lambda are executed with the rest of the list as parameters,
+i.e. (spit "hello~" (+ 9000 1)). runs the lambda `spit` refers to using "hello" 
+and (+ 9000 1). the lower-order function is calculated for the higher-order one,
+so it ends up calling `spit` with "hello" and 9001.
 there are also pre-processor macros:
 - INCLUDE:<path>, for expanding and inserting another file
 - DEFINE:<name>:macro:<arg1>:<arg2>:<argn>, for defining macros
@@ -37,7 +40,7 @@ examples:
 this language belongs to makise kurisu. there are many like it, but this one is hers.
 
 <===
-(def a (id (id "desu")))
+(def a (id "desu"))
 (spit
 	("lol swej" (+ 9000 1) a))
 ===>
