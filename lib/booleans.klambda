@@ -1,2 +1,7 @@
 (def true 1)
 (def false 0)
+
+(def ! (lambda (val)
+    (cond (val)
+        0
+        1)))

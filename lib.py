@@ -80,8 +80,6 @@ def execute(program):
                 return reduce(lambda a, b: (a[0], a[1]/b[1]), subs[1:])
             elif ctx[0] == _ident("%"):
                 return (subs[1][0], subs[1][1]%subs[2][1])
-            elif ctx[0] == _ident("!"):
-                return ("number", 0.0 if _truthy(subs[1]) else 1.0)
             elif ctx[0] == _ident("=="):
                 return ("number", 1.0 if subs[1] == subs[2] else 0.0)
             elif ctx[0] == _ident("="):
