@@ -1,9 +1,9 @@
-(def loop (lambda (max i statement)
+(def loop (lambda (min i statement)
     (all 
         statement
-        (cond (= i max)
+        (cond (= i min)
             false
-            (loop max (- i 1) (id statement))))))
+            (loop min (- i 1) (id statement))))))
 
 (def each
     (lambda (it action)
