@@ -1,12 +1,12 @@
 INCLUDE:./lib/aids.klambda
 
 (def a (id (id "desu")))
-(spit
+(prettyspit-lst
 	("lol swej" (+ 9000 1) a))
 (spit (cond (= "10" (+ 1 9)) "same" "not same"))
 (cond ("", (+ 0 1))
-	(id spit "one")
-	(id spit "zero"))
+	(spit "one")
+	(spit "zero"))
 
 (spit "how old are you? > ")
 (def age (conv number (input)))

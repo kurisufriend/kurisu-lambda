@@ -1,11 +1,19 @@
+INCLUDE:./loop.klambda
+
+(def spit-raw (lambda (cunny)
+    (w "/dev/fd/1" cunny)))
+
 (def spit (lambda (cunny)
-    (miracle
-        "__import__('builtins')" "print" (id cunny))))
+    (spit-raw (+ (conv string cunny) "\n"))))
+
+(def prettyspit-lst (lambda (lst-cunny)
+	(each lst-cunny
+		(id spit-raw (+ (conv string item) " ")))))
 
 (def input (lambda ()
-	(miracle
-		"__import__('builtins')" "input" (""))))
+    (r "/dev/fd/0" 20)))
+
 (def thesis (lambda ()
 	(spit
-		("this language belongs to makise kurisu. there are many like it, but this one is hers."))))
-DEFINE:<3:(thesis)
+		"this language belongs to makise kurisu. there are many like it, but this one is hers.")))
+(def <3 thesis)
