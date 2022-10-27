@@ -68,9 +68,10 @@ def execute(program):
             elif ctx[0] == _ident("miracle"):
                 return _box(getattr(eval(_destr(subs[1])), _destr(subs[2]))(*[(i if type(i) == type([]) else i[1]) for i in _fixarr(subs[3])]))
             elif ctx[0] == _ident("r"):
-                return open(_destr(subs[1]), "r").read(subs[2][1])
+                return ("string", open(_destr(subs[1]), "r").read(subs[2][1]))
             elif ctx[0] == _ident("w"):
-                return open(_destr(subs[1]), "w").write(_destr(subs[2]))
+                open(_destr(subs[1]), "w").write(_destr(subs[2]))
+                return subs[2]
             elif ctx[0] == _ident("def"):
                 ids[ctx[1]] = subs[2]
                 return ids[ctx[1]]
