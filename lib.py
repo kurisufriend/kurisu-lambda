@@ -3,7 +3,7 @@
 # t. cirno
 
 def execute(program):
-    import traceback, copy
+    import traceback, copy, sys
     from functools import reduce
     def _execute(ctx, ids):
         import sys, functools
@@ -62,11 +62,15 @@ def execute(program):
 
             subs = _fixarr(list(map(lambda a: _execute(a, lids), ctx)))
 
-            if ctx[0][1][0] == "$":
-                return subs
+            if ctx[0][1][0] == ".":
+                return _execute(subs[1:], lids)
 
             elif ctx[0] == _ident("miracle"):
                 return _box(getattr(eval(_destr(subs[1])), _destr(subs[2]))(*[(i if type(i) == type([]) else i[1]) for i in _fixarr(subs[3])]))
+            elif ctx[0] == _ident("r"):
+                return open(_destr(subs[1]), "r").read(_destr(subs[2]))
+            elif ctx[0] == _ident("w"):
+                return open(_destr(subs[1]), "w").write(_destr(subs[2]))
             elif ctx[0] == _ident("def"):
                 ids[ctx[1]] = subs[2]
                 return ids[ctx[1]]
@@ -115,6 +119,8 @@ def execute(program):
                 return list(
                     map(lambda a: _execute(a, lids), ctx)
                 )
+            elif ctx[0] == "string":
+                return (ctx[0], ctx[1].replace('\\n', '\n').replace('\\t', '\t'))
                 
             return ctx
     idspace = {}
