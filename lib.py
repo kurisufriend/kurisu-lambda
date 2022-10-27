@@ -68,7 +68,7 @@ def execute(program):
             elif ctx[0] == _ident("miracle"):
                 return _box(getattr(eval(_destr(subs[1])), _destr(subs[2]))(*[(i if type(i) == type([]) else i[1]) for i in _fixarr(subs[3])]))
             elif ctx[0] == _ident("r"):
-                return ("string", open(_destr(subs[1]), "r").read(subs[2][1]))
+                return ("string", open(_destr(subs[1]), "r").read(int(subs[2][1])))
             elif ctx[0] == _ident("w"):
                 open(_destr(subs[1]), "w").write(_destr(subs[2]))
                 return subs[2]
@@ -94,6 +94,13 @@ def execute(program):
             elif ctx[0] == _ident("<"):
                 return ("number", 1.0 if subs[1][1] < subs[2][1] else 0.0)
             elif ctx[0] == _ident("conv"):
+                if subs[1][1] == "number":
+                    return (subs[1][1], float(subs[2][1]))
+                elif subs[1][1] == "string":
+                    return (subs[1][1], str(subs[2][1] if not isinstance(subs[2], list) else subs[2]))
+                elif subs[1][1] == "identifier":
+                    return (subs[1][1], str(subs[2][1]))
+                    
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
             elif ctx[0] == _ident("all"):
                 ret = _execute(subs[1], lids)
