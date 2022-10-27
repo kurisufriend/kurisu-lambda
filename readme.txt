@@ -45,10 +45,10 @@ demonstrative examples:
 (def hello (+ "goodbye, " hello "!!"))
 :this sets `hello`'s expansion to the following (executed in steps):
 
-: (+ "goodbye, " hello "!!"))
+: (+ "goodbye, " hello "!!")
 
 :then `hello` gets expanded to its set value, "world"...
-: (+ "goodbye, " "world" "!!"))
+: (+ "goodbye, " "world" "!!")
 
 :then the `+` builtin executes, using "goodbye, ", "world", and "!!" as
 : parameters, which concatenates them
@@ -66,8 +66,10 @@ demonstrative examples:
     (w "/dev/fd/1" cunny)))
 :it writes the passed argument to /dev/fd/1, a.k.a STDOUT
 
-:define another lambda expansion, this time appending a newline
-: escape to the parameter and calling `split-raw` on it
+:define another lambda expansion, this time converting
+: the parameter to a string via `conv`, then appending a
+:  newline escape to the parameter and ising it to call
+:   `split-raw`
 (def spit (lambda (cunny)
     (spit-raw (+ (conv string cunny) "\n"))))
 
@@ -77,12 +79,20 @@ demonstrative examples:
 	(spit
 		"this language belongs to makise kurisu. there are many like it, but this one is hers.")))
 
+:here `thesis` gets expanded to its lambda expression,
+: which itself expands a `split` to it's lambda expression,
+:  which finally expands a `spit-raw` and executes the whole
+:   assembly from the ground up, printing the string to STDOUT.
 (thesis)
 ===>
 this language belongs to makise kurisu. there are many like it, but this one is hers.
 
 <===
 :use our ability to pass code around for the creation of a recursive looping macro 
+:here it counts down while expanding more copies of itself (recursion), until it 
+: is fully expanded and the last `cond` returns `false`. then it executes from the
+:   ground up, calling `statement` each time -- effectively calling it once for
+:    each value of the counter.
 (def loop (lambda (min i statement)
     (all 
         statement
@@ -90,7 +100,8 @@ this language belongs to makise kurisu. there are many like it, but this one is 
             false
             (loop min (- i 1) (id statement))))))
 
-:use the loop macro to define another macro executing for each item in a list
+:use the loop macro to define another macro executing a statementfor each item in
+: a list
 (def each
     (lambda (it action)
         (loop 0 (- (length it) 1)
@@ -148,7 +159,8 @@ buzz
 (def moeblob ("moe" "moe~" "kyun!!"))
 :iterate over said list, passing each item to a statement
 :the statement is only executed in the scope of the macro, so `item` expands to the
-: actual value of each item
+: actual value of each item. since `item` is defined passing the statement to `loop`,
+:  we could actually use `i` as well!
 (each moeblob
 	(id spit item))
 ===>
