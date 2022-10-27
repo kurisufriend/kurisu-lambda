@@ -6,3 +6,4 @@ INCLUDE:./lists.klambda
 INCLUDE:./kokoro.klambda
 INCLUDE:./booleans.klambda
 INCLUDE:./string.klambda
+INCLUDE:./math.klambda

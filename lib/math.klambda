@@ -1,0 +1,9 @@
+(def % (lambda (a m)
+    (cond (== m a)
+        0
+        (cond (< m a)
+            (% (- a m) m)
+            (- a 0)
+        )
+    )
+))
