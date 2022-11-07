@@ -103,9 +103,9 @@ def execute(program):
                     
                 return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
             elif ctx[0] == _ident("all"):
-                ret = _execute(subs[1], lids)
+                ret = [_execute(subs[1], lids)]
                 for statement in subs[2:]:
-                    ret = _execute(statement, lids)
+                    ret.append(_execute(statement, lids))
                 return ret
             elif ctx[0] == _ident("at"):
                 return subs[2][int(subs[1][1])]
