@@ -129,4 +129,4 @@ program = structurize(lex(tokenize(preprocess(sys.argv[1]))))
 
 #print(program)
 
-lib.execute(program)
+lib.play(program, "".join(preprocess(sys.argv[1])).replace("RDANEELOLIVAW", " "))

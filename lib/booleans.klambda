@@ -3,5 +3,23 @@
 
 (def ! (lambda (val)
     (cond (val)
-        0
-        1)))
+        false
+        true)))
+
+(def ? (lambda (val)
+    (cond (val)
+        true
+        false)))
+
+(def or (lambda (a b)
+    (? (a b))))
+
+(def and (lambda (a b)
+    (? (! 
+        ((! a) (! b))))))
+
+(def nand (lambda (a b)
+    (! (and a b))))
+
+(def xor (lambda (a b)
+    (and (or a b) (! (and a b)))))

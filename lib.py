@@ -2,6 +2,181 @@
 # BET UR MAD BAKADESU HAHAHAHHAHAHAHAH
 # t. cirno
 
+
+
+"""
+SHITTY HACK SOLUTION:
+>find deepest function-type-thing in code block
+>simplify
+>repeat until deepest == code block
+
+REAL SOLUTION:
+>mark all functions in code block unexecuted
+>find deepest /UNEXECUTED/ function
+>etc.
+"""
+
+best_depth = -1337
+best_elem = None
+
+#ahn~
+def find_deepest(code):
+    if not isinstance(code, list): return code
+ 
+    global best_elem
+    global best_depth
+    best_depth = -1337
+    best_elem = code
+    def _find_deepest(code, depth):
+        global best_depth
+        global best_elem
+        if not any(map(lambda e: isinstance(e, list), code)) or (code[0][0] == "identifier" and code[0][1] in ["lambda", "cond", "id"]):
+            if depth > best_depth:
+                best_depth = depth
+                best_elem = code
+        else:
+            for i in code:
+                if isinstance(i, list):
+                    _find_deepest(i, depth+1)
+        return best_elem
+            
+    _find_deepest(code, 0)
+
+    return best_elem
+
+def _eval(ctx):
+    from functools import reduce
+    subs = ctx
+    def _ident(name):
+        return ("identifier", name)
+    if ctx[0] == _ident("lambda"):
+        return ("lambda", (ctx[1], ctx[2]))
+    elif ctx[0] == _ident("cond"):
+        return _execute(ctx[2], lids) if _truthy(_execute(ctx[1], lids)) else _execute(ctx[3], lids)
+    elif ctx[0][1] == "id":
+        return ctx[1] if len(ctx[1:]) == 1 else ctx[1:]
+
+    if ctx[0][1][0] == ".":
+        return _execute(subs[1:], lids)
+
+    elif ctx[0] == _ident("miracle"):
+        return _box(getattr(eval(_destr(subs[1])), _destr(subs[2]))(*[(i if type(i) == type([]) else i[1]) for i in _fixarr(subs[3])]))
+    elif ctx[0] == _ident("r"):
+        return ("string", open(_destr(subs[1]), "r").read(int(subs[2][1])))
+    elif ctx[0] == _ident("w"):
+        open(_destr(subs[1]), "w").write(_destr(subs[2]))
+        return subs[2]
+    elif ctx[0] == _ident("def"):
+        ids[ctx[1]] = subs[2]
+        return ids[ctx[1]]
+    elif ctx[0] == _ident("+"):
+        return reduce(lambda a, b: (a[0], a[1]+b[1]), subs[1:])
+    elif ctx[0] == _ident("-"):
+        return reduce(lambda a, b: (a[0], a[1]-b[1]), subs[1:])
+    elif ctx[0] == _ident("*"):
+        return reduce(lambda a, b: (a[0], a[1]*b[1]), subs[1:])
+    elif ctx[0] == _ident("/"):
+        return reduce(lambda a, b: (a[0], a[1]/b[1]), subs[1:])
+    elif ctx[0] == _ident("^"):
+        return reduce(lambda a, b: (a[0], a[1]**b[1]), subs[1:])
+    elif ctx[0] == _ident("=="):
+        return ("number", 1.0 if subs[1] == subs[2] else 0.0)
+    elif ctx[0] == _ident("="):
+        return ("number", 1.0 if str(float(subs[1][1])) == str(float(subs[2][1])) else 0.0)
+    elif ctx[0] == _ident(">"):
+        return ("number", 1.0 if subs[1][1] > subs[2][1] else 0.0)
+    elif ctx[0] == _ident("<"):
+        return ("number", 1.0 if subs[1][1] < subs[2][1] else 0.0)
+    elif ctx[0] == _ident("conv"):
+        if subs[1][1] == "number":
+            return (subs[1][1], float(subs[2][1]))
+        elif subs[1][1] == "string":
+            return (subs[1][1], str(subs[2][1] if not isinstance(subs[2], list) else subs[2]))
+        elif subs[1][1] == "identifier":
+            return (subs[1][1], str(subs[2][1]))
+            
+        return (subs[1][1], float(subs[2][1]) if subs[1][1] == "number" else str(subs[2][1]))
+    elif ctx[0] == _ident("all"):
+        ret = [_execute(subs[1], lids)]
+        for statement in subs[2:]:
+            ret.append(_execute(statement, lids))
+        return ret
+    elif ctx[0] == _ident("at"):
+        return subs[2][int(subs[1][1])]
+    elif ctx[0] == _ident("insert"):
+        subs[3].insert(int(subs[1][1]), subs[2])
+        return subs[3]
+    else:
+        #print(f"{subs[0]} is not a valid function")
+        return _execute(subs, lids)
+
+def step(state):
+    def _recursereplace(i, fr, to):
+        if type(i) == type([]) and not(i == fr):
+            subs = list(
+                map(lambda a: _recursereplace(a, fr, to), i)
+            )
+            return subs
+        else:
+            return to if i == fr else i
+    deepest = find_deepest(state)
+    #print("deepest\n", deepest)
+    simplified = _eval(deepest)
+    #print("simplified\n", simplified)
+    state = _recursereplace(state, deepest, simplified)
+    #print(state)
+    #input()
+    return state
+
+
+
+def play(program, pp):
+    import pickle
+    def _puter2human(shit):
+        hack = str(shit)
+        acc = ""
+        i = 0
+        while i < len(hack):
+            c = hack[i]
+            if c == "[":
+                acc += "("
+            elif c == "]":
+                acc += ")"
+            elif c == "(":
+                racer = i
+                while hack[racer] != ")": racer += 1
+                #print(hack[i:racer+1])
+                acc += str(eval(hack[i:racer+1])[1]) + " "
+            i += 1
+        return acc
+    def treefix(a):
+        if not isinstance(a, list): return a
+        t = list(map(lambda e: treefix(e), a))
+        return ("unexecuted", t)
+    #program = treefix(program)30
+    print("the program:", pp)
+    input()
+    states = []
+    for strand in program:
+        strandstates = []
+        while True:
+            strand = step(strand)
+            strandstates.append(strand)
+            if strand == find_deepest(strand):
+                strand = step(strand)
+                strandstates.append(strand)
+                break
+        states.append(strandstates)
+        #print(strand)
+        #print(find_deepest(strand))
+        #input()
+    f = open("fullans.pkl", "wb") 
+    f.write(pickle.dumps(states[0]))
+    f.close()
+    for idx, i in enumerate(states[0]):
+        print(f"state {idx}: {_puter2human(i)}")
+    print("solution:", states[0][-1][1])
+
 def execute(program):
     import traceback, copy, sys
     from functools import reduce
